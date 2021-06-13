@@ -44,15 +44,19 @@ void rpc_goBySec(Arguments *in, Reply *out){
     out->putData(buf);
 }
 
+double cmToSec(double cm){
+    if(cm < 0)
+        cm = -cm;
+    return cm / 9.9 + 0.3;
+}
+
 void goByCm(double cm){
-    double sec = cm / 9.9 + 0.3;;
-    if(cm >= 0){
+    double sec = cmToSec(cm);
+    if(cm >= 0)
         car.goStraightCalib(10);
-    }
-    else{
-        sec = -sec;
+    else
         car.goStraightCalib(-10);
-    }
+
     ThisThread::sleep_for(duration_cast<milliseconds>(duration<double>(sec)));
     car.stop();
 }
@@ -63,11 +67,18 @@ void rpc_goByCm(Arguments *in, Reply *out){
 }
 
 void rpc_rPark(Arguments *in, Reply *out){
-    double d1 = in->getArg<double>() + 1.0f;
-    double d2 = in->getArg<double>() + 8.0f;
+    double d1 = in->getArg<double>() + 1.0;
+    double d2 = in->getArg<double>() + 8.0;
     double goDist = d1 - d2;
     goByCm(goDist);
-    ThisThread::sleep_for(1s);
+    ThisThread::sleep_for(500ms);
+    double R = d1 >= d2 ? d1 : d2; // turning radius
+    double factor = 1.0 - 11.0 / R;
+    double path = 6.28 * R / 4.0;
+    double sec = cmToSec(path);
+    car.turnCalib(-10, -factor);
+    ThisThread::sleep_for(duration_cast<milliseconds>(duration<double>(sec)));
+    car.stop();
 }
 
 RPCFunction Myrpc1(&rpc_goStraightCalib, "goStraightCalib");
