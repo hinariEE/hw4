@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "myXbee.h"
+#include "mbed_rpc.h"
 
 BufferedSerial xbee(D1, D0);
 EventQueue queue(32 * EVENTS_EVENT_SIZE);
@@ -17,7 +18,7 @@ void reply_messange(char *xbee_reply, const char *messange){
     }
 }
 
-void check_addr(char *xbee_reply, char *messenger){
+void check_addr(char *xbee_reply, const char *messenger){
    xbee.read(&xbee_reply[0], 1);
    xbee.read(&xbee_reply[1], 1);
    xbee.read(&xbee_reply[2], 1);
@@ -29,30 +30,40 @@ void check_addr(char *xbee_reply, char *messenger){
    xbee_reply[3] = '\0';
 }
 
-void xbee_rx(void){
+void xbee_rx_interrupt(){
+    queue.call(&xbee_rx);
+}
+
+void xbee_rx(){
     static int i = 0;
-    static char buf[128];
+    static char buf[128], outbuf[128];
     while(xbee.readable()){
         char c;
         xbee.read(&c, 1);
         if(c!='\r' && c!='\n'){
-            buf[i] = c;
-            i++;
-        }else if(i == 0){ // ignore redundant char in buffer
-
+            buf[i++] = c;
+        }else if(i == 0){ // unnecessary: ignore redundant char in buffer
+            buf[i++] = '\r';
+            buf[i++] = '\n';
+            buf[i++] = '\0';
+            xbee.write(buf, i);
+            i = 0;
+            RPC::call(buf, outbuf);
+            xbee.write(outbuf, sizeof(outbuf));
+            xbee.write("\r\n", 2);
         }
         else{
             buf[i] = '\0';
-            printf("Get: %s\n", buf);
-            xbee.write(buf, sizeof(buf));
+            RPC::call(buf, outbuf);
+            //printf("%s\n", outbuf);
+            buf[i++] = '\r';
+            buf[i++] = '\n';
+            buf[i++] = '\0';
+            xbee.write(buf, i);
             i = 0;
         }
     }
     ThisThread::sleep_for(100ms);
-}
-
-void xbee_rx_interrupt(void){
-    queue.call(&xbee_rx);
 }
 
 void xbee_init(){

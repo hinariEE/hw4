@@ -35,7 +35,6 @@ int main() {
     car.setCalibTable(31, pwm_table0, speed_table0, 31, pwm_table0, speed_table1);
 
     car.stop();
-    printf("test\n");
     xbee_init();
 
     char buf[256] = {0}, outbuf[256] = {0};
