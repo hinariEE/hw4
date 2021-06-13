@@ -42,25 +42,22 @@ void xbee_rx(){
         xbee.read(&c, 1);
         if(c!='\r' && c!='\n'){
             buf[i++] = c;
-        }else if(i == 0){ // unnecessary: ignore redundant char in buffer
-            buf[i++] = '\r';
-            buf[i++] = '\n';
-            buf[i++] = '\0';
-            xbee.write(buf, i);
-            i = 0;
-            RPC::call(buf, outbuf);
-            xbee.write(outbuf, sizeof(outbuf));
-            xbee.write("\r\n", 2);
         }
-        else{
-            buf[i] = '\0';
-            RPC::call(buf, outbuf);
-            //printf("%s\n", outbuf);
+        else{ // unnecessary: ignore redundant char in buffer
             buf[i++] = '\r';
             buf[i++] = '\n';
-            buf[i++] = '\0';
+            buf[i] = '\0';
             xbee.write(buf, i);
             i = 0;
+            printf("%s", buf);
+            outbuf[0] = '\0';
+            RPC::call(buf, outbuf);
+            printf("%s\r\n", outbuf);
+            int len = 0;
+            while(outbuf[len])
+                len++;
+            xbee.write(outbuf, len);
+            xbee.write("\r\n", 2);
         }
     }
     ThisThread::sleep_for(100ms);
