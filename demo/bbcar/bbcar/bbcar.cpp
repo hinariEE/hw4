@@ -14,8 +14,8 @@ void BBCar::controlWheel(){
 void BBCar::stop(){
     servo0.set_factor(1);
     servo1.set_factor(1);
-    servo0.set_speed(0);
-    servo1.set_speed(0);
+    servo0.set_speed_by_cm(0);
+    servo1.set_speed_by_cm(0);
 }
 
 void BBCar::goStraight( double speed ){\
@@ -69,16 +69,16 @@ void BBCar::turnCalib( double speed, double factor ){
 }
 
 void BBCar::spinCalib( double speed, double factor ){
+    servo0.set_factor(1);
+    servo1.set_factor(1);
     if(factor == 1){
-        servo0.set_factor(-1);
-        servo1.set_factor(1);
+        servo0.set_speed_by_cm(-speed);
+        servo1.set_speed_by_cm(-speed);
     }
     else if(factor == -1){
-        servo0.set_factor(1);
-        servo1.set_factor(-1);
+        servo0.set_speed_by_cm(speed);
+        servo1.set_speed_by_cm(speed);
     }
-    servo0.set_speed_by_cm(speed);
-    servo1.set_speed_by_cm(-speed);
 
 }
 
