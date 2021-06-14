@@ -25,7 +25,7 @@ mbed add https://gitlab.larc-nthu.net/ee2405_2021/bbcar
 
 ---
 ## XBee Controlled BB Car
-* demo video: in Teams
+* demo video: https://drive.google.com/file/d/1-1fowyP2O1HVGRsO2l7lLhRWmwH42wea/view?usp=sharing
 * case 1<br>
 d1 = 10 cm<br>
 d2 = 10 cm<br>
