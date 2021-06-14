@@ -67,21 +67,21 @@ void rpc_goByCm(Arguments *in, Reply *out){
 }
 
 void rpc_rPark(Arguments *in, Reply *out){
-    double d1 = in->getArg<double>();              // edge-wheel: 8 cm
-    double d2 = in->getArg<double>() + 8.0 + 2.0;  // slot width: 4 cm wider than the car
+    double d1 = in->getArg<double>();        // wheel thickness: 1.5 cm
+    double d2 = in->getArg<double>() + 8.0 ; // edge-wheel: 8 cm, slot width: 4 cm wider than the car
     double goDist = d1 - d2;
     goByCm(goDist);
     ThisThread::sleep_for(1500ms);
-    double R = d1 + 11.0;                          // turning radius: R; car width: 11 cm
-    double factor = 1.0 - 11.0 / R;                // R = 11 / (1 - factor) (cm);
+    double R = d1 + 11.0;                    // turning radius: R; car width: 11 cm
+    double factor = 1.0 - 11.0 / R;          // R = 11 / (1 - factor) (cm);
     if(factor == 0.0)
         factor = 1e-6;
-    double path = 6.28 * R / 4.0; // 3.14 * 2 => 6.0
+    double path = 6.28 * R / 4.0;            // 3.14 * 2 => 6.28, a quarter circle => 1 / 4
     double sec = cmToSec(path);
     car.turnCalib(-10, -factor);
     ThisThread::sleep_for(duration_cast<milliseconds>(duration<double>(sec)));
     car.stop();
-    ThisThread::sleep_for(1s);
+    ThisThread::sleep_for(1500ms);
     goByCm(-5);
 }
 
