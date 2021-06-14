@@ -22,6 +22,7 @@ sudo python3 Xbee_setting.py
 ```console
 mbed add https://gitlab.larc-nthu.net/ee2405_2021/bbcar
 ```
+I have modified `bbcar.cpp`.
 
 ---
 ## XBee Controlled BB Car
