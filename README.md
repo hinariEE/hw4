@@ -28,6 +28,9 @@ mbed add https://gitlab.larc-nthu.net/ee2405_2021/bbcar
 ```
 
 ---
+## 運作原理
+本次作業使用了比例控制的概念。
+
 ## Demo Videos
 https://drive.google.com/drive/folders/1TCFKUdYpighEKNE049Uwt63aagqrl9gP?usp=sharing
 
