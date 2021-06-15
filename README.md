@@ -17,7 +17,7 @@ sudo -H pip3 install pyserial
 ```
 
 ## For PC Xbee Setting
-In the demo directory, run
+Under `PC_Xbee` folder in the demo directory, run
 ```console
 sudo python3 Xbee_setting.py
 ```
