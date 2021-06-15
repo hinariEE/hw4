@@ -6,8 +6,8 @@
   RX -> D0<br>
   TX -> D1
 * OpenMV:<br>
-  RX(P5) -> A0<br>
-  TX(P4) -> A1
+  P4(TX) -> A0<br>
+  P5(RX) -> A1
 
 ## For pyserial
 ```console
