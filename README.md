@@ -60,4 +60,4 @@ sudo python3 hw4_1_2.py
 * demo folder: demo_3
 * 原理<br>
   同時利用AprilTag的角度資訊，及Ping的距離資訊，計算所需的移動方向及距離。
-* PC Xbee會持續列出AprilTag的（角度, 水平平移, 距離）
+* PC Xbee會持續收到AprilTag的（角度, 水平平移, 距離）
